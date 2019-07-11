@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GitHub Actions for R</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="index_files/rmdshower/node_modules/@shower/material/styles/styles.css">
+  <style>
+    .shower {
+      --slide-ratio: 1.6;
+      --color-key: #453AA4;
+    }
+  </style>
+  <link rel="stylesheet" href="index_files/rmdshower/style-common.css">
+  <link rel="stylesheet" href="index_files/rmdshower/style-material.css">
+  
+  
+  
+  
+      <link href="https://fonts.googleapis.com/css?family=Fira+Mono|Fira+Sans|Fira+Sans+Condensed|Fira+Sans+Extra+Condensed&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/solarized-light.min.css">
+    <script src="https://kit.fontawesome.com/ef5d88ea54.js"></script>
+    
+    <style>
+    .logo {
+      padding: 110px 90px 110px 90px;
+      width: 15%;
+      filter: grayscale(100%);
+    }
+    .cover {
+      padding-bottom: 1%;
+    }
+    .clear .cover {
+      padding-bottom: 0px;
+      height: 100%;
+    }
+    </style>
+      <script src="index_files/htmlwidgets-1.3/htmlwidgets.js"></script>
+    <script src="index_files/viz-0.3/viz.js"></script>
+    <link href="index_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+    <script src="index_files/grViz-binding-1.0.0/grViz.js"></script>
+  
+</head>
+
+<body class="shower list">
+
+  <header class="caption">
+    <h1>GitHub Actions for R</h1>
+    <p>Max Held</p>
+  </header>
+
+  
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  
+<section class="slide level2">
+
+<div class="columns two">
+<div>
+<h2>
+GitHub Actions for R
+</h2>
+Max Held
+<p class="note">
+<i class="fas fa-link"></i> <a href=http://www.maxheld.de>http://www.maxheld.de</a> <br> <i class="fab fa-github"></i> <span class="citation" data-cites="maxheld83">@maxheld83</span> <br> <i class="fab fa-twitter"></i> <span class="citation" data-cites="maxheld">@maxheld</span>
+</p>
+</div>
+<div>
+<p><img src="https://raw.githubusercontent.com/r-lib/ghactions/master/logo.png" width="100%"></p>
+</div>
+<figcaption class="copyright bottom">
+RStudio Inc. / Friedrich-Alexander Universität Erlangen Nürnberg
+</figcaption
+</div>
+</section>
+<section class="slide clear">
+<h2 class="shout">
+What is <br>Continuous Integration and Delivery (<strong>CI/CD</strong>)?
+</h2>
+</section>
+<section class="slide black clear">
+<figure>
+<img class="cover" src="assets/lebowski.png" height="100%">
+<figcaption class="copyright white">
+The Big Lebowski (1998) / <a href=https://me.me/i/but-it-works-on-my-machine-works-defect-software-meme-b5fc63057ac24e8dbdcfa4ef52e24d6f>http://www.picturesso.com</a>
+</figcaption>
+</figcaption>
+</figure>
+</section>
+<section class="slide">
+<h2>
+Without CI/CD
+</h2>
+<div id="htmlwidget-d67ba2e9696346bb572b" style="width:100%;height:25%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d67ba2e9696346bb572b">{"x":{"diagram":"digraph cicd {\n\ngraph [\n  layout = dot\n  rankdir = LR\n]\n\nnode  [\n  shape = rectangle\n  color = black\n  fixedsize = true\n  height = 0.7\n  width = 2.0\n  style = solid\n  fontsize=20\n]\n\nnode  [\n  fontname = \"Courier\"\n  label = \"project.rmd\"\n]\nsource\n\nnode [\n  fontname = \"Fira Sans\"\n  label = \"My Computer\"\n  style = dashed\n]\ncomputer\n\nnode [\n  fontname = \"Courier\",\n  label = \"project.pdf\"\n  style = solid\n]\nbinary\n\nedge [\n  arrowhead = \"vee\"\n  color = black,\n  fontname = \"Courier\"\n  minlen = 5\n  fontsize=20\n]\nsource -> {binary} [\n  label = \"rmarkdown::render()\"\n  width = 1\n]\ncomputer -> {binary} [\n  label = \"%$@#!\"\n  fontname = \"Fira Sans\"\n]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<h2>
+With CI/CD
+</h2>
+<div id="htmlwidget-cc6a4bca11e62a92de25" style="width:100%;height:25%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cc6a4bca11e62a92de25">{"x":{"diagram":"digraph cicd {\n\ngraph [\n  layout = dot\n  rankdir = LR\n]\n\nnode  [\n  shape = rectangle\n  color = black\n  fixedsize = true\n  width = 2.0\n  height = 0.7\n  style = solid\n  fontsize=20\n]\n\nnode  [\n  fontname = \"Courier\"\n  label = \"project.rmd\"\n]\nsource\n\nnode [\n  label = \".travis.yml \\n Dockerfile\"\n  fillcolor = \"#453AA4\"\n  style = filled\n  fontcolor = white\n]\ncomputer\n\nnode [\n  fontname = \"Courier\"\n  label = \"project.pdf\"\n  fontcolor = black\n  fillcolor = white\n]\nbinary\n\nedge [\n  arrowhead = \"vee\"\n  color = black,\n  fontname = \"Courier\"\n  minlen = 5\n  fontsize=20\n]\nsource -> {binary} [\n  label = \"rmarkdown::render()\"\n  width = 1\n]\ncomputer -> {binary} [\n  label = \"docker run\"\n]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<figcaption class="copyright">
+<i class="fab fa-github"></i> <span class="citation" data-cites="maxheld83">@maxheld83</span> <i class="fab fa-twitter"></i> <span class="citation" data-cites="maxheld">@maxheld</span>
+</figcaption>
+</section>
+<section class="slide">
+<h2>
+GitHub Actions in Action
+</h2>
+<pre class="R">
+<code>remotes::install_github(“r-lib/ghactions”)</code> <code>ghactions::use_ghactions(</code> <code> workflow = ghactions::website()</code> <code>)</code>
+<pre>
+<br>
+<pre class="bash">
+  <code>git add .</code>
+  <code>git commit -m "update project"</code>
+  <code>git push</code>
+</pre>
+<img class="cover place right" src="assets/rmd.gif">
+</section>
+<section class="slide clear">
+<p><img class="place left top logo" src="assets/travis.png"></p>
+<p><img class="place left logo" src="assets/gitlab.png"></p>
+<p><img class="place left bottom logo" src="assets/azure.jpeg"></p>
+<p><img class="place right top logo" src="assets/circleci.png"></p>
+<p><img class="place right logo" src="assets/appveyor.png"></p>
+<p><img class="place right bottom logo" height="15%" style="width:auto" src="assets/google-cloud-build.png"></p>
+<p><img class="place center" src="assets/github-actions.jpeg"></p>
+<figcaption class="copyright">
+<i class="fab fa-github"></i> <span class="citation" data-cites="maxheld83">@maxheld83</span> <i class="fab fa-twitter"></i> <span class="citation" data-cites="maxheld">@maxheld</span>
+</figcaption>
+</section>
+<section class="slide black clear">
+<figure>
+<img class="cover" width="100%" src="assets/travis-fail.jpg">
+</figure>
+</section>
+<section class="slide clear">
+<h2 class="shout">
+Is it <strong>easy <br>to reason about</strong>?
+</h2>
+</section>
+<section class="slide clear">
+<h2 class="shout">
+Definition of the <strong>Computing Environment</strong>
+</h2>
+</section>
+<section class="slide">
+<div class="columns two">
+<div>
+<h2>
+<code>Dockerfile</code>
+</h2>
+<pre class="Dockerfile">
+  <code>FROM rhub/debian-gcc-release</code>
+  ...
+  <code>ENTRYPOINT ["/entrypoint.R"]</code>
+  </pre>
+<pre class="bash">
+  <code>docker build \</code>
+  <code>  --tag install-deps .</code>
+  <code>docker run \</code>
+  <code>  --entrypoint R install-deps</code>
+  </pre>
+</div>
+<div>
+<h2>
+<code>.travis.yml</code>
+</h2>
+<pre class="yaml">
+  <code>language:r</code>
+  <code>cache: packages</code>
+  ...
+  <code>deploy:</code>
+  <code>  provider: script</code>
+  <code>    script: Rscript -e \</code> <code>      'pkgdown::deploy_site_github(verbose = TRUE)'</code>
+  </pre>
+</div>
+</div>
+<figcaption class="copyright">
+<i class="fab fa-github"></i> <span class="citation" data-cites="maxheld83">@maxheld83</span> <i class="fab fa-twitter"></i> <span class="citation" data-cites="maxheld">@maxheld</span>
+</figcaption>
+</section>
+<section class="slide">
+<h2>
+What GitHub does …
+</h2>
+<pre>
+  <code>action "Deploy to shinyapps.io" {</code>
+  <code>  uses = "maxheld83/shinyapps<mark class="important">@master"</mark></code>
+  <code>  secrets = [<mark>"SHINYAPPS_SECRET"</mark>, SHINYAPPS_TOKEN"]</code>
+  <code>}</code>
+</pre>
+<h2>
+.. you can do too!
+</h2>
+<pre class="bash">
+  <code>docker run <mark>--env "SHINYAPPS_SECRET=foo"</mark> \ </code>
+  <code>  --volume ${PWD}:${HOME} maxheld83/shinyapps<mark class=important>:master</mark></code>
+</pre>
+<figcaption class="copyright">
+<i class="fab fa-github"></i> <span class="citation" data-cites="maxheld83">@maxheld83</span> <i class="fab fa-twitter"></i> <span class="citation" data-cites="maxheld">@maxheld</span>
+</figcaption>
+</section>
+<section class="slide black clear">
+<figure>
+<img class="cover" src="assets/troubleshoot.gif" height="100%">
+</figure>
+</section>
+<section class="slide clear">
+<h2 class="shout">
+Definition of the <strong>Workflow Graph</strong>
+</h2>
+</section>
+<section class="slide">
+<pre>
+  <code>workflow "Deploy Shiny App" {</code>
+  <code>  on = <mark>"push"</mark></code>
+  <code>  resolves = [<mark class="important">"Deploy to shinyapps.io"</mark>]</code>
+  <code>}</code>
+  <code>action <mark>"Install Dependencies"</mark> {</code>
+  <code>  uses = "r-lib/ghactions/install-deps"</code>
+  <code>}</code>
+  <code>action <mark class="important">"Deploy to shinyapps.io"</mark>{</code>
+  <code>  uses = "maxheld83/shinyapps@master"</code>
+  <code>  needs = [<mark>"Install Dependencies"</mark>]</code>
+  <code>}</code>
+</pre>
+<img class="cover place right" src="assets/package.gif">
+</section>
+<section class="slide">
+<h2>
+Isolation Can be a Good Thing
+</h2>
+<div class="columns three">
+<div>
+<em>Your PC</em>
+<pre><code>R_LIBS=''</code></pre>
+<pre><code>git push</code></pre>
+<pre class="shell-session"><code>ls .</code></pre>
+<pre><code class="bash">index.Rmd
+app.R</code></pre>
+</div>
+<div>
+<code>actions/rmarkdown</code>
+<pre><code>R_LIBS=<mark>/lib/R/library</mark></code></pre>
+<pre><code>render_site()</code></pre>
+<pre class="shell-session"><code>ls /github/workspace/</code></pre>
+<pre class="shell-session"><code>index.Rmd
+app.R
+_site/ </code>
+</pre>
+</div>
+<div>
+<code>actions/shinyapps</code>
+<pre><code>R_LIBS=<mark class="important">/lib/R/library</mark></code></pre>
+<pre><code>deploy_app()</code></pre>
+<pre class="shell-session"><code>ls /github/workspace/</code></pre>
+<pre class="shell-session"><code>index.Rmd
+app.R
+_site/ </code>
+</pre>
+</div>
+</div>
+<figcaption class="copyright">
+<i class="fab fa-github"></i> <span class="citation" data-cites="maxheld83">@maxheld83</span> <i class="fab fa-twitter"></i> <span class="citation" data-cites="maxheld">@maxheld</span>
+</figcaption>
+</section>
+<section class="slide clear" id="ecosystem">
+<h2 class="shout">
+Definition of the <br> <strong>API Ecosystem</strong>
+</h2>
+</section>
+<section class="slide">
+<h2>
+Go Nuts! 🤯
+</h2>
+<div id="htmlwidget-3ffb876f830dc99d6b01" style="width:100%;height:70%;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3ffb876f830dc99d6b01">{"x":{"diagram":"digraph api {\n\ngraph [\n  layout = dot\n  rankdir = LR\n]\n\nnode  [\n  shape = rectangle\n  color = black\n  fixedsize = true\n  width = 7\n  height = 1.3\n  style = solid\n  fontsize=35\n]\n\nnode  [\n  fontname = \"Courier\"\n  label = \"push\"\n]\npush\n\nnode  [\n  fontname = \"Courier\"\n  label = \"release\"\n]\nrelease\n\nnode  [\n  fontname = \"Courier\"\n  label = \"issue\"\n]\nissue\n\nnode  [\n  fontname = \"Courier\"\n  label = \"member\"\n]\nmember\n\nnode [\n  label = \"GitHub Actions\"\n  fillcolor = \"#453AA4\"\n  style = filled\n  fontcolor = white\n]\nactions\n\nnode [\n  label = \"GitHub Pages\"\n  fontcolor = black\n  fillcolor = white\n]\npages\n\nnode [\n  label = \"git commit\"\n]\ncommit\n\nnode [\n  label = \"POST comment\"\n]\ncomment\n\nnode [\n  label = \"...\"\n]\noutel\n\nnode [\n  label = \"...\"\n]\ninel\n\nedge [\n  arrowhead = \"vee\"\n  color = black,\n  fontname = \"Courier\"\n  minlen = 5\n  fontsize=25\n]\npush -> {actions} [\n  width = 1\n]\nrelease -> {actions} [\n  width = 1\n]\nissue -> {actions} [\n  width = 1\n]\nmember -> {actions} [\n  width = 1\n]\nactions -> {pages} [\n]\nactions -> {commit} [\n]\nactions -> {comment} [\n]\nactions -> {outel} [\n]\ninel -> {actions} [\n]\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<figcaption class="copyright">
+<i class="fab fa-github"></i> <span class="citation" data-cites="maxheld83">@maxheld83</span> <i class="fab fa-twitter"></i> <span class="citation" data-cites="maxheld">@maxheld</span>
+</figcaption>
+</section>
+<section class="slide clear">
+<figure>
+<img class="cover" src="assets/fixup.png" height="100%">
+</figure>
+</section>
+<section class="slide">
+<div class="columns two" <div="">
+<ul class="fa-ul">
+<h2>
+Actions
+</h2>
+<li>
+<i class="fa-li fas fa-box"></i><code>R CMD build</code>
+</li>
+<li>
+<i class="fa-li fas fa-check-square"></i><code>R CMD check</code>
+</li>
+<li>
+<i class="fa-li fas fa-umbrella"></i><code>covr::codecov()</code>
+</li>
+<li>
+<i class="fa-li fas fa-book"></i><code>roxygen2::roxygenize()</code>
+</li>
+…
+<li>
+<i class="fa-li fas fa-download"></i><code>remotes::install_deps()</code>
+</li>
+<li>
+<i class="fa-li fas fa-link"></i><code>pkgdown::build_site()</code>
+</li>
+<li>
+<i class="fa-li fas fa-upload"></i><code>rsconnect::deploy_app()</code>
+</li>
+<li>
+<i class="fa-li fas fa-book-reader"></i><code>rmarkdown::render_*()</code>
+</li>
+</ul>
+<ul>
+<h2>
+Workflows
+</h2>
+<li>
+R Markdown Projects
+</li>
+<li>
+Shiny Apps
+</li>
+<li>
+Packages
+</li>
+<li>
+<code>Rscript</code> bring-your-own-docker
+</li>
+…
+<li>
+Deploy to Netlify, GitHub Pages, Firebase, Shinyapps.io, RSync, …
+</li>
+</ul>
+<figcaption class="copyright">
+<i class="fab fa-github"></i> <span class="citation" data-cites="maxheld83">@maxheld83</span> <i class="fab fa-twitter"></i> <span class="citation" data-cites="maxheld">@maxheld</span>
+</figcaption>
+</div>
+</section>
+<section class="slide black clear">
+<figure>
+<img class="cover" src="assets/docker-born.jpg" height="100%">
+<figcaption class="copyright white">
+Finding Neverland (2004)
+</figcaption>
+</figure>
+</section>
+<section class="slide clear">
+<h2 class="shout">
+It’s <strong>easier(ish)</strong> <br> to reason about.
+</h2>
+</section>
+<section class="slide">
+<div class="columns two" <div="">
+<ul>
+<h2>
+Short Term
+</h2>
+<li value="😞">
+Still in (limited) beta.
+</li>
+<li value="😒">
+No native caching.
+</li>
+<li value="😐">
+No real-time logs.
+</li>
+<li value="🧐">
+Sparse documentation.
+</li>
+<li value="😲">
+No support for pull requests.
+</li>
+<li value="😌">
+One less service to authenticate against.
+</li>
+</ul>
+<ul>
+<h2>
+Long Term?
+</h2>
+<li value="😐">
+No cross-platform support or matrix builds.
+</li>
+<li value="🤪">
+Easy access to much of the GitHub API
+</li>
+<li value="😎">
+Potential for reuse accross ecosystems and marketplace (?).
+</li>
+<li value="🤓">
+Partly open-source, limited vendor lock-in.
+</li>
+</ul>
+</div>
+<figcaption class="copyright">
+<i class="fab fa-github"></i> <span class="citation" data-cites="maxheld83">@maxheld83</span> <i class="fab fa-twitter"></i> <span class="citation" data-cites="maxheld">@maxheld</span>
+</figcaption>
+</section>
+<section class="slide">
+<h2>
+🖖Thanks❤️
+</h2>
+Jim Hester
+<p class="note">
+RStudio Inc.
+</p>
+Gábor Csárdi
+<p class="note">
+The R-Hub Project / R Consortium
+</p>
+Dirk Eddelbuettel &amp; Carl Boettiger
+<p class="note">
+The Rocker Project
+</p>
+</section>
+<section class="slide clear">
+<h2>
+Use <i class="fab fa-github"></i> Actions to Better 🤔🔧🐞
+</h2>
+<div class="columns two">
+<div>
+<ol type="1">
+<li>Sign up for the beta at <a href=http://www.github.com/actions>github.com/actions</a>.</li>
+<li><code class="R">remotes::install_github(<mark>“r-lib/ghactions”</mark>)</code></li>
+</ol>
+<h2>
+Learn More
+</h2>
+<p><i class="fas fa-link"></i> <a href=http://www.maxheld.de/ghactions>maxheld.de/ghactions</a> <br> <i class="fab fa-github"></i> <a href=http://github.com/r-lib/ghactions>github.com/r-lib/ghactions</a></p>
+</div>
+<div>
+<p><img src="https://raw.githubusercontent.com/r-lib/ghactions/master/logo.png" width="100%"></p>
+</div>
+</div>
+<figcaption class="copyright">
+<i class="fab fa-github"></i> <span class="citation" data-cites="maxheld83">@maxheld83</span> <i class="fab fa-twitter"></i> <span class="citation" data-cites="maxheld">@maxheld</span>
+</figcaption
+</section>
+</section>
+
+    <div class="progress"></div>
+  
+  <script src="index_files/rmdshower/node_modules/shower-core/shower.min.js"></script>
+
+  <!-- Copyright © 2015 Yours Truly, Famous Inc. -->
+  <!-- Photos by John Carey, fiftyfootshadows.net -->
+
+  
+  
+</body>
+</html>

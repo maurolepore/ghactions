@@ -1,0 +1,17 @@
+pandoc: 1.19.2.1
+pkgdown: 1.3.0
+pkgdown_sha: ~
+articles:
+  ghactions: ghactions.html
+  isolation: isolation.html
+  local: local.html
+  performance: performance.html
+  auto-commit: pkg-dev/auto-commit.html
+  ci: pkg-dev/ci.html
+  review: pkg-dev/review.html
+  rscript-byod: rscript-byod.html
+  testing: testing.html
+urls:
+  reference: https://r-lib.github.io/ghactions//reference
+  article: https://r-lib.github.io/ghactions//articles
+
